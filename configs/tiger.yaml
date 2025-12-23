@@ -1,0 +1,33 @@
+sd_version: "1.5" # In ['2.1', '2.0', '1.5', 'depth']
+input_path: "examples/data/tiger" # Accept .mp4, .gif file or a folder with png/jpg sequence
+bbox_path: "examples/data/tiger/groundtruth.txt"
+work_dir: "outputs/tiger/test"
+
+height: 512
+width: 512
+
+inversion:
+  save_path: "${work_dir}/latents"
+  prompt: "a tiger walking by the riverbank."
+  save_intermediate: False # Save intermediate latents. Required when using PnP.
+  force: True
+
+generation:
+  control: "softedge"
+  control_scale: 0.65
+  prompt: "(masterpiece, best quality, ultra-detailed, 4k, highres), (realistic, photorealistic, sharp focus), a white tiger walking by the riverbank"
+  phrase: ["a white tiger"]
+  word: ['tiger']
+  latents_path: "${work_dir}/latents"
+  output_path: "${work_dir}"
+  location_strong_control: False #True
+
+  # Token merge args. See details in "src/vidtome/patch.py, apply_patch()"
+  local_merge_ratio: 0.9
+  global_merge_ratio: 0.6
+  global_rand: 0.5
+  frame_range: [0, 60, 1]
+
+self_correcting: True
+max_iteration: 2
+base_config: configs/default.yaml
