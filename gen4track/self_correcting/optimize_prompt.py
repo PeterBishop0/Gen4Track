@@ -1,5 +1,5 @@
 from openai import OpenAI
-
+import re
 def prompt_optimizer(llm_generate_fn,prompt_history, num_solutions):
         '''
         evaluation_result for example:
@@ -30,19 +30,60 @@ def prompt_optimizer(llm_generate_fn,prompt_history, num_solutions):
 
 
         prompt = f"""\
-        prompt: You are an expert prompt optimizer for text-to-image models. Text-to-image models take a text prompt as input and generate images depicting the prompt as output. You translate prompts written by humans into better prompts for the text-to-image models. Your answers should be concise and effective.\
-        Your task is to optimize the user prompt. Below are some previous prompts with the consistency of each prompt’s visual elements in the generated image via a set of binary questions andthe clip score of each visual element (range from 0 to 100). The prompts are arranged in ascending order based on their overall consistency score, which ranges from 0 to 100 (higher is better).\
+        You are an expert prompt engineer for Stable Diffusion–style text-to-image models.
+
+        Stable Diffusion expects prompts written as:
+        - comma-separated keywords or short phrases
+        - no complete sentences
+        - no narrative or instructional language
+        - no verbs such as "create", "show", or "depict"
+        - explicit visual attributes (object appearance, pose, environment, lighting, camera)
+        - parentheses () may be used for emphasis
+
+        You will be given a context consisting of multiple optimization rounds.
+        Each round includes:
+        - the prompt used in that round
+        - an overall consistency score
+        - detailed evaluation results based on a decomposed scene graph
+
+        The evaluation results contain:
+        1. Binary judgments for global visual attributes (e.g., realism, sharp focus, ultra-detailed).
+        2. Noun-level CLIP scores indicating how well each object is visually grounded.
+
+        Interpretation rules:
+        - A binary result of "no" indicates a missing or weak visual cue and MUST be explicitly addressed.
+        - A noun with a low CLIP score (<40) lacks visual specificity and MUST be reinforced with concrete attributes.
+        - Improving noun-level CLIP scores has higher priority than adding new objects.
+        - Do NOT introduce new objects that are not present in the scene graph.
+        - Do NOT remove existing objects or relations.
+
+        Optimization objectives:
+        - Preserve the original semantic meaning of the prompt.
+        - Increase visual specificity and physical realism.
+        - Explicitly reinforce low-scoring objects (e.g., appearance, pose, material, spatial relation).
+        - Add realistic environment, lighting, and camera cues when needed.
+        - Ensure the new prompt would achieve a higher overall consistency score than all previous rounds.
+
+        Context:
         {context}
-        Generate {num_solutions} paraphrases of the initial prompt which keep the semantic meaning and that have higher scores than all the prompts above. \
-        Focus on optimizing for the visual elements that are not consistent. Prioritize optimizing for object with lowest clip scores. Add appropriate details and background descriptions.\
-        Respond with each new prompt in between <PROMPT> and </PROMPT>, eg:
-        1. <PROMPT>paraphrase 1</PROMPT>
-        2. <PROMPT>paraphase 2</PROMPT>
+
+        Task:
+        Generate {num_solutions} optimized prompts that satisfy all the above constraints.
+
+        Output requirements:
+        - Output ONLY Stable Diffusion–style prompts.
+        - Each prompt must be written in tag-based, comma-separated format.
+        - Do NOT output explanations, reasoning, or analysis.
+        - Do NOT repeat or lightly paraphrase previous prompts.
+
+        Output format:
+        1. <PROMPT>optimized prompt 1</PROMPT>
+        2. <PROMPT>optimized prompt 2</PROMPT>
         ...
-        {num_solutions}. <PROMPT>paraphrase {num_solutions}</PROMPT>
+        {num_solutions}. <PROMPT>optimized prompt {num_solutions}</PROMPT>
         """
         # Call the LLM API
-        response_text = self.llm_generate_fn(prompt)
+        response_text = llm_generate_fn(prompt)
         print("LLM Response:", response_text)
 
         pattern = r"<PROMPT>(.*?)</PROMPT>"

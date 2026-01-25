@@ -434,20 +434,3 @@ class Generator(nn.Module):
         self.contcohe_sa.remove_stylealign()
         return frame_path
 
-if __name__ == "__main__":
-    # Load configuration
-    config = load_config()
-    # Initialize model, scheduler, and key
-    pipe, scheduler, model_key = init_model(
-        config.device, config.sd_version, config.model_key, config.generation.control, config.float_precision)
-    config.model_key = model_key
-    # Set random seeds for reproducibility
-    seed_everything(config.seed)
-    # Create generator instance
-    generator = Generator(pipe, scheduler, config)
-    # Get frame IDs for generation
-    frame_ids = get_frame_ids(
-        config.generation.frame_range, config.generation.frame_ids)
-    # Run generation
-    generator(config.input_path, config.generation.latents_path,
-              config.generation.output_path, frame_ids=frame_ids)

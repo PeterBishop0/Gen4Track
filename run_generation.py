@@ -58,7 +58,7 @@ if __name__ == "__main__":
         for i in range(0,max_iteration):
             print(f"\n===== Iteration {i} =====")
             print(f"Prompt:\n{current_prompt}")
-            # 1. Run evaluation
+            # Run evaluation
             try:
                 images = os.listdir(gen_frame_path)
                 image_path = os.path.join(gen_frame_path, images[0]) 
@@ -69,7 +69,7 @@ if __name__ == "__main__":
                     image_dir=gen_frame_path
                 )
 
-                # 2. Store history (list[dict])
+                # Store history (list[dict])
                 prompt_history.append({
                     "round": i,
                     "prompt": current_prompt,
@@ -77,21 +77,20 @@ if __name__ == "__main__":
                     "score": overall_score
                 })
 
-                # 3. Optimize prompt based on full history
-                num_solutions = 3
-                new_prompt = prompt_optimizer(
-                    openai_completion,
-                    prompt_history,
-                    evaluation_result,
-                    num_solutions
-                )
+                # Restart generation if not qualified
+                if overall_score < 70:
+                     # Optimize prompt based on full history
+                    num_solutions = 3
+                    new_prompt = prompt_optimizer(
+                        openai_completion,
+                        prompt_history,
+                        num_solutions
+                    )
 
-                # 4. Select next prompt
-                current_prompt = new_prompt[0]
-                new_output_path = os.path.join(config.generation.output_path, str(i + 1))
+                    #  Select next prompt
+                    current_prompt = new_prompt[0]
+                    new_output_path = os.path.join(config.generation.output_path, str(i + 1))
 
-                # 5. Restart generation if not qualified
-                if overall_score < 40:
                     print(f"Restart {i}-th generation!")
                     gen_frame_path = generator(
                         config.input_path,

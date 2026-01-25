@@ -1,0 +1,31 @@
+sd_version: "1.5"
+input_path: "examples/data/squirrel"
+bbox_path: "examples/data/squirrel/groundtruth.txt" 
+work_dir: "outputs/squirrel"
+
+height: 512
+width: 512
+
+inversion:
+  save_path: "${work_dir}/latents"
+  prompt: "squirrel moving among tree branches."
+  save_intermediate: False 
+  force: True
+
+generation:
+  control: "softedge"
+  control_scale: 0.7 
+  prompt: "a cute brown squirrel with big sparkling eyes gracefully leaping among whimsical tree branches, surrounded by glowing fireflies and blooming flowers, in a magical forest bathed in golden light. Storybook illustration style, soft lighting, gentle pastel tones, delicate textures, fairy tale atmosphere"
+  phrase: ["a cute brown squirrel"]
+  word: ['squirrel'] 
+  latents_path: "${work_dir}/latents"
+  output_path: "${work_dir}"
+  location_strong_control: False 
+  local_merge_ratio: 0.9 
+  global_merge_ratio: 0.6 
+  global_rand: 0.5
+  frame_range: [0, 60, 1]
+
+self_correcting: True 
+max_iteration: 3
+base_config: configs/default.yaml
