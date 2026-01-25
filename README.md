@@ -15,9 +15,9 @@ Below are three demonstration examples showcasing the data augmentation process 
 
 | Edit Type | Original Video | Edited Video | Edit Prompt |
 | --- | --- | --- | --- |
-| **Background** | <video src="assets/ori-truck.mp4" width="220" controls></video> | <video src="assets/truck.mp4" width="220" controls></video> | A grey armored truck running across a desert wasteland alongside other vehicles. |
-| **Style** | <video src="assets/ori-squirrel.mp4" width="220" controls></video> | <video src="assets/brown squirrel moving among tree branches,fairy tale atmosphere.mp4" width="220" controls></video> | brown squirrel moving among tree branches, fairy tale atmosphere. |
-| **Object** | <video src="assets/ori-tiger.mp4" width="220" controls></video> | <video src="assets/a white wolf walking by the riverbank.mp4" width="220" controls></video> | a white wolf walking by the riverbank. |
+| **Background** | ![](assets/ori_truck.gif) | ![](assets/edit_truck.gif) | A grey armored truck running across a desert wasteland alongside other vehicles. |
+| **Style** | ![](assets/ori_squirrel.gif) | ![](assets/edit_squirrel.gif) | brown squirrel moving among tree branches, fairy tale atmosphere. |
+| **Object** | ![](assets/ori_tiger.gif) | ![](assets/edit_tiger.gif) | a white wolf walking by the riverbank. |
 
 
 ## Updates
