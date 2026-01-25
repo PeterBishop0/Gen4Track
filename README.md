@@ -1,4 +1,4 @@
-## Gen4Track: A Tuning-free Data Augmentation Framework via Self-correcting Diffusion Model for Vision-Language Tracking (ACM MM 2025)<br><sub>Official Pytorch Implementation</sub>
+## Gen4Track: A Tuning-free Data Augmentation Framework via Self-correcting Diffusion Model for Vision-Language Tracking (ACM MM 2025)<br><sub>Official PyTorch Implementation by [Xinyu Zhang](https://github.com/Xinyu-01)</sub>
 
 [Jiawei Ge](https://scholar.google.com/citations?user=5GI4k7cAAAAJ), [Xinyu Zhang](https://github.com/Xinyu-01), Jiuxin Cao, Ioannis Patras, et al.<br>
 
